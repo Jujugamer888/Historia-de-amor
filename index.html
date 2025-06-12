@@ -60,8 +60,7 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        input[type="text"],
-        input[type="password"] { /* Mantendo input[type="password"] caso você tenha outros estilos para ele */
+        input[type="text"] { /* Agora só precisa do estilo para type="text" */
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #d147a3;
@@ -74,10 +73,11 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        input[type="text"]:focus,
-        input[type="password"]:focus {
+        input[type="text"]:focus {
             border-color: #ff69b4;
         }
+
+        /* Removido input[type="password"] e seus focos dos estilos, pois não haverá campo de senha */
 
         button[type="submit"] {
             background-color: #d147a3;
