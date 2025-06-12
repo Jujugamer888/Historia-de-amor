@@ -343,7 +343,7 @@
   </script>
 </head>
 <body>
-  <audio id="background-music" autoplay loop>
+  <audio id="background-music-historia" loop>
     <source src="static/audio/embarrassed_bts.mp3" type="audio/mpeg">
     Seu navegador não suporta o elemento de áudio.
   </audio>
@@ -644,31 +644,4 @@ Ou pouco?`;
       mostrarElemento('final');
     }
 
-    // Função para o ÚLTIMO texto (após o meme), agora usando o texto corrigido
-    function mostrarMemeETexto() {
-      mostrarElemento('etapaMeme');
-      const imgMeme = document.getElementById('imagemMeme');
-      const textoMaquinaFinalDiv = document.getElementById('textoMaquinaFinal');
-
-      imgMeme.style.display = 'block';
-
-      setTimeout(() => {
-          textoMaquinaFinalDiv.style.display = 'block';
-          textoMaquinaFinalDiv.innerHTML = '<pre></pre>';
-          const preElement = textoMaquinaFinalDiv.querySelector('pre');
-          escreverTexto(preElement, textoMensagemFinal); // AGORA USA O TEXTO CORRIGIDO PARA O FINAL!
-      }, 1500);
-    }
-
-
-    // --- Inicialização ao carregar a página ---
-    document.addEventListener("DOMContentLoaded", () => {
-      esconderTodos(); // Esconde todos os blocos no início
-      // Corrigido para mostrar o login por padrão se o index.html for o login
-      // Se o index.html for a história, o redirecionamento já acontece no <head>
-      // Se você está usando este código para o *arquivo da história*, a linha abaixo não deve ser tocada.
-      document.getElementById('inicio').style.display = 'block'; // Mostra a tela inicial da história
-    });
-  </script>
-</body>
-</html>
+    //
