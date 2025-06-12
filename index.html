@@ -8,28 +8,27 @@
         /* Estilos do corpo para a página de login */
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background: url("static/imagens/fundo_login.jpg") no-repeat center center fixed;
+            background: url("static/imagens/fundo_login.jpg") no-repeat center center fixed; /* Usando o fundo_login.jpg */
             background-size: cover;
-            color: #fff9f9;
+            color: #fff9f9; /* Cor do texto no corpo */
             text-align: center;
             display: flex;
-            flex-direction: column; /* Alterado para coluna para o botão ficar acima */
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow: hidden; /* Evita barras de rolagem desnecessárias */
             position: relative;
             z-index: 1;
         }
 
-        /* Camada semi-transparente para o fundo */
+        /* Camada semi-transparente para o fundo (como no seu CSS original) */
         body::before {
             content: "";
             position: fixed;
             inset: 0;
-            background: rgba(255, 240, 245, 0.7);
+            background: rgba(255, 240, 245, 0.7); /* rosa clarinho */
             z-index: -1;
         }
 
@@ -39,9 +38,9 @@
             padding: 30px 35px;
             border-radius: 16px;
             max-width: 400px;
-            width: 90%;
+            width: 90%; /* Ajusta para telas menores */
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            z-index: 10;
+            z-index: 10; /* Garante que o formulário fique acima do overlay */
         }
 
         h2 {
@@ -61,6 +60,7 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
+        /* Estilos para input de texto e senha (reintroduzidos para password) */
         input[type="text"],
         input[type="password"] {
             width: 100%;
@@ -80,8 +80,7 @@
             border-color: #ff69b4;
         }
 
-        button[type="submit"],
-        button.btn { /* Aplicando o estilo do botão para o novo botão de música também */
+        button[type="submit"] {
             background-color: #d147a3;
             border: none;
             color: white;
@@ -95,90 +94,42 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        button[type="submit"]:hover,
-        button.btn:hover {
+        button[type="submit"]:hover {
             background-color: #ff69b4;
         }
     </style>
 </head>
 <body>
-    <audio id="background-music" loop>
-        <source src="static/audio/embarrassed_bts.mp3" type="audio/mpeg">
-        Seu navegador não suporta o elemento de áudio.
-    </audio>
-
     <div class="overlay"></div>
-
-    <button id="toggleMusicBtn" class="btn">Ativar Música Funny 🎵</button>
 
     <form onsubmit="simularLogin(event);" class="login-form">
         <h2>Bem-vindo(a) ao nosso cantinho 💕</h2>
-        <p>A senha é um dia muito importante que eu tive com você </p>
-        <input type="text" name="usuario" placeholder="Seu nome fofo aqui" autocomplete="off" required><br>
-        <input type="password" name="senha" id="senhaInput" placeholder="Senha" autocomplete="off" required><br>
-        <button type="submit">Vamos lá 💖</button>
+        <p>A senha é um dia muito importante que eu tive com você </p> <input type="text" name="usuario" placeholder="Seu nome fofo aqui" autocomplete="off" required><br>
+        <input type="password" name="senha" id="senhaInput" placeholder="Senha" autocomplete="off" required><br> <button type="submit">Vamos lá 💖</button>
     </form>
 
     <script>
-        // Funções de login
         function simularLogin(event) {
             event.preventDefault(); // Impede o envio padrão do formulário
 
             const nomeUsuario = document.querySelector('input[name="usuario"]').value;
-            const senhaDigitada = document.getElementById('senhaInput').value;
+            const senhaDigitada = document.getElementById('senhaInput').value; // Pega o valor da senha digitada
             
-            // Verifica se o campo de nome e senha não estão vazios
+            // Verifica se o campo de nome NÃO está vazio
             if (nomeUsuario.trim() === '') {
                 alert('Por favor, digite seu nome fofo!');
+            // Opcional: Você pode querer que a senha também não seja vazia, se não, pode remover o `&& senhaDigitada.trim() !== ''`
             } else if (senhaDigitada.trim() === '') { 
                 alert('Por favor, digite a senha (qualquer coisa serve)!');
-            } else {
-                localStorage.setItem('acessoPermitido', 'true');
-                // Salva o estado da música antes de redirecionar
-                const music = document.getElementById('background-music');
-                localStorage.setItem('musicaAtivada', music.paused ? 'false' : 'true'); 
+            }
+            else {
+                // Se o nome e a senha não estiverem vazios (qualquer valor), o acesso é permitido
+                localStorage.setItem('acessoPermitido', 'true'); // Marca o usuário como "logado"
+                // Opcional: Você pode salvar o nome do usuário também se quiser usá-lo na história
+                // localStorage.setItem('nomeFofo', nomeUsuario); 
                 window.location.href = 'historia.html'; // Redireciona para a página da história
             }
         }
-
-        // CÓDIGO para a música no LOGIN
-        document.addEventListener("DOMContentLoaded", () => {
-            const music = document.getElementById('background-music');
-            const toggleMusicBtn = document.getElementById('toggleMusicBtn');
-
-            // Tentar restaurar o estado da música ao carregar a página de login
-            const musicaAtivadaAnteriormente = localStorage.getItem('musicaAtivada');
-            if (musicaAtivadaAnteriormente === 'true') {
-                music.play().then(() => {
-                    toggleMusicBtn.textContent = 'Pausar Música ⏸️';
-                }).catch(error => {
-                    console.log("Autoplay bloqueado na página de login, mas tentou ativar:", error);
-                    // Se o autoplay for bloqueado, o botão já está no estado certo e o usuário pode clicar
-                });
-            } else {
-                 toggleMusicBtn.textContent = 'Ativar Música Funny 🎵'; // Estado inicial
-                 music.pause(); // Garante que esteja pausada se não foi ativada antes
-            }
-
-            // Ativar/desativar música ao clicar no botão
-            if (toggleMusicBtn) {
-                toggleMusicBtn.onclick = () => {
-                    if (music.paused) {
-                        music.play().then(() => {
-                            toggleMusicBtn.textContent = 'Pausar Música ⏸️';
-                            localStorage.setItem('musicaAtivada', 'true');
-                        }).catch(error => {
-                            console.log("Falha ao tocar música pelo clique:", error);
-                            alert("Seu navegador pode estar bloqueando a reprodução automática de áudio. Por favor, interaja com a página ou verifique as configurações de mídia.");
-                        });
-                    } else {
-                        music.pause();
-                        toggleMusicBtn.textContent = 'Ativar Música Funny 🎵';
-                        localStorage.setItem('musicaAtivada', 'false');
-                    }
-                };
-            }
-        });
     </script>
 </body>
 </html>
