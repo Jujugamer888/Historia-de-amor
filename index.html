@@ -61,7 +61,7 @@
         }
 
         input[type="text"],
-        input[type="password"] {
+        input[type="password"] { /* Mantendo input[type="password"] caso você tenha outros estilos para ele */
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #d147a3;
@@ -103,9 +103,8 @@
 
     <form onsubmit="simularLogin(event);" class="login-form">
         <h2>Bem-vindo(a) ao nosso cantinho 💕</h2>
-        <p>A senha é um dia muito importante que eu tive com você </p>
+        <p>Por favor, digite seu nome fofo para continuar:</p>
         <input type="text" name="usuario" placeholder="Seu nome fofo aqui" autocomplete="off" required><br>
-        <input type="password" name="senha" id="senhaInput" placeholder="Senha" autocomplete="off" required><br>
         <button type="submit">Vamos lá 💖</button>
     </form>
 
@@ -113,18 +112,17 @@
         function simularLogin(event) {
             event.preventDefault(); // Impede o envio padrão do formulário
 
-            const senhaDigitada = document.getElementById('senhaInput').value;
+            const nomeUsuario = document.querySelector('input[name="usuario"]').value;
             
-            // Defina a senha correta aqui!
-            const senhaCorreta = "0524"; // Exemplo: 24 de maio. Substitua pela sua senha real.
-
-            if (senhaDigitada.trim() === '') {
-                alert('Por favor, digite a senha!');
-            } else if (senhaDigitada === senhaCorreta) {
-                localStorage.setItem('acessoPermitido', 'true'); // Marca o usuário como "logado"
-                window.location.href = 'historia.html'; // Redireciona para a página da história
+            // Apenas verifica se o campo de nome não está vazio.
+            // Qualquer nome preenchido será aceito.
+            if (nomeUsuario.trim() === '') {
+                alert('Por favor, digite seu nome!');
             } else {
-                alert('Senha incorreta! Tente novamente.');
+                localStorage.setItem('acessoPermitido', 'true'); // Marca o usuário como "logado"
+                // Opcional: Você pode salvar o nome do usuário também se quiser usá-lo na história
+                // localStorage.setItem('nomeFofo', nomeUsuario); 
+                window.location.href = 'historia.html'; // Redireciona para a página da história
             }
         }
     </script>
