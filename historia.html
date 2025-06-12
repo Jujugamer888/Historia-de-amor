@@ -138,7 +138,7 @@
       color: #ffe6f0;
     }
 
-    /* Estilos para IMAGENS (AJUSTADO para se encaixarem, sem afetar o login) */
+    /* Estilos para IMAGENS (AJUSTADO para se encaixarem) */
     img {
       max-width: 100%;
       height: auto;
@@ -228,6 +228,7 @@
     }
 
     /* === Seções do Login (MANTIDAS EXATAMENTE INTACTAS COMO VOCÊ AS FORNECEU) === */
+    /* ATENÇÃO: Estes estilos de login devem estar no seu index.html (a página de login) ou em um arquivo CSS separado que ambos index.html e historia.html referenciam. Se estão apenas aqui, não afetarão o index.html. */
     .login-form {
         background: rgba(255, 255, 255, 0.9);
         padding: 30px 35px;
@@ -342,6 +343,11 @@
   </script>
 </head>
 <body>
+  <audio id="background-music" autoplay loop>
+    <source src="static/audio/embarrassed_bts.mp3" type="audio/mpeg">
+    Seu navegador não suporta o elemento de áudio.
+  </audio>
+
   <div class="container" role="main" aria-live="polite">
     <div id="inicio">
       <h1>Continuar a história de amor mais doida que você já viu</h1>
@@ -401,7 +407,7 @@
     </div>
 
     <div id="galeria">
-      </div>
+    </div>
 
     <div id="jogo">
       <h1>Agora vamos jogar um pouquinho 🎮💗</h1>
@@ -448,14 +454,15 @@
 esse seu sorriso bobo`;
 
     // DEFINIÇÃO DO TEXTO LONGO PARA A MÁQUINA DE ESCREVER (usado após a imagem final)
-    const textoLongoMaquina = `Mas como não posso.. eu fiz um site
-eu sei que muitas vezes temos dificuldade, obstáculos e desafios no dia dia...
+    const textoLongoMaquina = `Eu sei que muitas vezes temos dificuldade, obstáculos e desafios no dia dia...
 às vezes estamos cansadas e acabadas de tanto trabalhar,
 mas eu posso jurar para você que eu viveria todo dia o mesmo dia só para poder estar ao seu lado,
 eu viveria mil e uma vidas só para poder viver com você
 e eu morreria mil e uma vezes para poder morrer com você,
 eu sou estupidamente apaixonada por você
-eu espero do fundo do meu coração que você saiba disso.`;
+eu espero do fundo do meu coração que você saiba disso.
+ALIAS AMOR, QUALQUER DATA QUE VC TIVESSE COLOCADO NA SENHA
+SERIA A CERTA, POIS TODOS OS DIAS COM VC SÃO IMPORTANTES`;
 
     // NOVO: Texto corrigido para a mensagem final (após o meme)
     const textoMensagemFinal = `Feliz nosso dia, amor! Espero que saiba que eu te amo muito e que, apesar do sono, trabalho, escola e faculdade, eu nunca escolheria algo diferente disso. Eu viveria essa mesma vida mil vezes com você e morreria mil vezes com você, só para poder estar ao seu lado.
