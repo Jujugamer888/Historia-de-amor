@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>História de Amor</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap');
+
+    /* Reset básico */
+    * {
+      box-sizing: border-box;
+      margin: 0; /* Adicionado para resetar margem padrão */
+      padding: 0; /* Adicionado para resetar padding padrão */
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Quicksand', Arial, sans-serif;
+      background: url('static/imagens/fundo.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+      text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
+      overflow-x: hidden;
+    }
+
+    /* Camada semi-transparente para o fundo */
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(30, 20, 40, 0.5);
+        z-index: -1;
+    }
+
+    .container {
+      background: rgba(30, 20, 40, 0.85);
+      padding: 25px 35px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 0 25px rgba(255, 136, 204, 0.7);
+      transition: transform 0.3s ease;
+      margin: 20px auto;
+    }
+
+    .container:hover {
+      transform: scale(1.03);
+    }
+
+    h1, h2 {
+      font-family: 'Great Vibes', cursive;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #ff88cc;
+      text-shadow: 2px 2px 8px #d46aa0;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      margin: 15px 0;
+      color: #ffe6f0;
+    }
+
+    button.btn {
+      background: linear-gradient(135deg, #ffaad1, #ff61b3);
+      border: none;
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      color: white;
+      border-radius: 30px;
+      margin: 15px 8px 0;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(255, 102, 170, 0.6);
+      transition: all 0.3s ease;
+      font-weight: 600;
+      user-select: none;
+    }
+    button.btn:hover {
+      background: linear-gradient(135deg, #ff61b3, #ffaad1);
+      box-shadow: 0 8px 16px rgba(255, 102, 170, 0.9);
+      transform: translateY(-3px);
+    }
+    button.btn:active {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(255, 102, 170, 0.7);
+    }
+
+    /* Elementos ocultos por padrão, controlados por JS */
+    #chat, #perguntaContinuar, #destaque, #textoMaquina, #escolhaFinal,
+    #casamentoCerto, #imagemFinal, #mensagem1, #galeria, #jogo, #texto1,
+    #texto2, #final, #respostaErrada, #etapaMeme, #textoMaquinaIntermediario {
+      display: none;
+      margin-top: 20px;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    /* Animação fadeIn suave */
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(15px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .msg {
+      background: rgba(255 255 255 / 0.15);
+      padding: 14px 18px;
+      border-radius: 20px;
+      margin: 8px auto;
+      max-width: 80%;
+      word-wrap: break-word;
+      box-shadow: 0 0 8px rgba(255, 136, 204, 0.4);
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .left {
+      text-align: left;
+      background: rgba(255 255 255 / 0.15);
+      border-top-left-radius: 0;
+      box-shadow: 2px 2px 12px rgba(255, 136, 204, 0.5);
+    }
+
+    .right {
+      text-align: right;
+      margin-left: auto;
+      background: rgba(255 255 255 / 0.3);
+      border-top-right-radius: 0;
+      box-shadow: -2px 2px 12px rgba(255, 136, 204, 0.6);
+      font-weight: 600;
+      color: #ffe6f0;
+    }
+
+    /* Estilos para IMAGENS (AJUSTADO para se encaixarem, sem afetar o login) */
+    img {
+      max-width: 100%;   /* ESSENCIAL: Garante que a imagem NUNCA será maior que o contêiner PAI */
+      height: auto;      /* ESSENCIAL: Mantém a proporção da imagem para não distorcer */
+      display: block;    /* Faz com que 'margin: auto' funcione para centralizar */
+      margin: 15px auto; /* Centraliza a imagem horizontalmente e adiciona espaçamento vertical */
+
+      border-radius: 20px; /* Ajustei de 12px para 20px para consistência com outros elementos do seu tema */
+      box-shadow: 0 0 18px rgba(255, 136, 204, 0.7); /* Sombra que você já tinha */
+      transition: transform 0.3s ease;
+      user-select: none;
+    }
+
+    img:hover {
+      transform: scale(1.05); /* Leve zoom ao passar o mouse */
+    }
+
+    /* Estilo específico para a GALERIA (#galeria) - REFORÇADO */
+    #galeria {
+      /* Limita a largura da div da galeria para que as imagens se ajustem DENTRO dela */
+      max-width: 100%; /* Garante que a #galeria não ultrapasse o .container */
+      width: 100%; /* Ocupa 100% da largura disponível no pai */
+      margin: 0 auto 40px; /* Centraliza a própria div da galeria */
+    }
+
+    /* Estilo específico para imagens dentro da galeria (.imagem-galeria) - REFORÇADO */
+    .imagem-galeria {
+      max-width: 100%; /* Garante que a imagem da galeria ocupe 100% do seu contêiner (#galeria) */
+      height: auto;    /* Mantém a proporção */
+      display: block;  /* Para centralizar com margin: auto */
+      margin: 12px auto; /* Centraliza */
+      
+      border-radius: 20px; /* Ajustei de 16px para 20px para consistência */
+      box-shadow: 0 0 15px rgba(255, 102, 170, 0.7);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .imagem-galeria:hover {
+      transform: scale(1.08);
+    }
+
+    /* Estilo para o emoji-jogo, agora apenas como um ícone visual */
+    #emoji-jogo {
+      font-size: 48px;
+      cursor: default;
+      user-select: none;
+      display: inline-block;
+      margin-top: 20px;
+      transform: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      text-shadow: 0 0 5px #ff88cc;
+      border-radius: 50%;
+      padding: 8px 12px;
+      background: rgba(255 136 204 / 0.3);
+    }
+
+    .maquina pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: 'Courier New', Courier, monospace;
+      border-right: 3px solid #ffaad1;
+      padding-right: 10px;
+      display: inline-block;
+      max-width: 90vw;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #ffd4e1;
+      text-shadow: 0 0 5px #ff88cc;
+    }
+
+    /* Animação de máquina de escrever real para o pre */
+    .maquina.escrevendo pre {
+        animation: typing 4s steps(60, end), blink-caret 0.75s step-end infinite;
+        width: 0;
+        overflow: hidden;
+    }
+
+    @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+        from, to { border-color: transparent }
+        50% { border-color: #ffaad1; }
+    }
+
+    /* === Seções do Login (MANTIDAS EXATAMENTE INTACTAS COMO VOCÊ FORNECEU) === */
+    .login-form {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 30px 35px;
+        border-radius: 16px;
+        max-width: 400px;
+        margin: 50px auto 80px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #d147a3;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        border-color: #ff69b4;
+    }
+
+    /* === Seções de Emojis e Ícones Interativos (MANTIDAS EXATAMENTE INTACTAS) === */
+    .coração {
+        font-size: 56px;
+        cursor: pointer;
+        user-select: none;
+        transition: transform 0.2s ease;
+    }
+
+    .coração:hover {
+        transform: scale(1.15);
+    }
+
+    /* === Animação Máquina de Escrever (MANTIDA EXATAMENTE INTACTA) === */
+    .escrever-efeito {
+        border-right: 2px solid #800080;
+        white-space: pre-wrap;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* === Estilos Especiais / Personalizados (MANTIDOS EXATAMENTE INTACTOS) === */
+    #convite-presente {
+        font-size: 22px;
+        color: #a3237c;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 25px;
+        text-shadow: 1px 1px 2px #fff;
+        user-select: none;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #convite-presente:hover {
+        color: #d147a3;
+        text-shadow: 1px 1px 5px #ffb6d9;
+    }
+
+    /* Galeria (Regra original duplicada que foi comentada ou já removida) */
+    /* #galeria { 
+        max-width: 500px; 
+        margin: 0 auto 40px; 
+    } */
+
+    /* Texto dentro da conversa estilo WhatsApp */
+    .conversa-texto {
+        background: #ffe6f7;
+        padding: 12px 20px;
+        border-radius: 24px;
+        box-shadow: 0 2px 8px rgba(209, 66, 157, 0.25);
+        max-width: 80%;
+        margin: 12px auto;
+        font-weight: 500;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Fade lento para imagem meme */
+    .fade-in-slow {
+        animation: fadeIn 2s ease forwards;
+    }
+
+    /* ==========================
+       Responsividade Básica (MANTIDO INTACTO)
+    ========================== */
+    @media (max-width: 480px) {
+        body {
+            padding: 15px 10px;
+        }
+        .login-form {
+            padding: 25px 20px;
+            margin: 30px auto;
+            max-width: 95%;
+        }
+        button, #botao-proximo {
+            width: 100%;
+            font-size: 16px;
+            padding: 12px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            font-size: 14px;
+            padding: 10px;
+        }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="main" aria-live="polite">
+    <div id="inicio">
+      <h1>Continuar a história de amor mais doida que você já viu</h1>
+      <button class="btn" onclick="mostrarChat()" aria-label="Começar a história">Começar</button>
+    </div>
+
+    <div id="chat" class="chat">
+      <div class="msg left"><strong>Julia-</strong><br>Oi moça, ignora meus story</div>
+      <div class="msg right"><strong>-Mariana</strong><br>kkkkkkkkkkk<br>achei uma graça</div>
+      <button class="btn" onclick="mostrarPerguntaContinuar()">Continuar Conversa</button>
+    </div>
+
+    <div id="perguntaContinuar">
+      <p style="cursor:pointer; text-decoration:underline;" onclick="mostrarDestaque()" tabindex="0" role="button" aria-pressed="false">
+        Quer mesmo continuar? É uma história muito longa...
+      </p>
+    </div>
+
+    <div id="destaque">
+      <p>Cadê o destaque Mariana??</p>
+      <img src="static/imagens/euuulenda.jpg" alt="Imagem muitoeu" />
+      <button class="btn" onclick="mostrarTextoMaquina()">Continuar</button>
+    </div>
+
+    <div id="textoMaquina" class="maquina"></div>
+
+    <div id="escolhaFinal">
+      <p>Você ainda está aqui? quer ver o final da história?</p>
+      <button class="btn" onclick="mostrarCasamento()">casamento julia e mariana</button>
+      <button class="btn" onclick="mostrarErro()">e se a gente não casar?</button>
+    </div>
+
+    <div id="casamentoCerto">
+      <p>Parabéns, fez a escolha certa... que bom... aqui está o nosso futuro:</p>
+      <img src="static/imagens/imagem.eukkj.jpeg" alt="Futuro" />
+      <button class="btn" onclick="mostrarFinalCompleto()">Continuar</button>
+    </div>
+
+    <div id="respostaErrada">
+      <p>Como você ousa fazer isso? volte para o início e reveja nossa vida juntas</p>
+      <button class="btn" onclick="location.reload()">Voltar ao início</button>
+    </div>
+
+    <div id="imagemFinal">
+      <img src="static/imagens/euuu.jpg" alt="Imagem do presente surpresa" />
+      <button class="btn" onclick="mostrarTextoMaquinaIntermediario()">Continuar 💕</button>
+    </div>
+
+    <div id="textoMaquinaIntermediario" class="maquina">
+      <pre></pre>
+      <button class="btn" onclick="mostrarGaleria()">Continuar 💕</button>
+    </div>
+
+    <div id="mensagem1">
+      <p>Mas como não posso, resolvi fazer um site só pra você 💖</p>
+      <button class="btn" onclick="mostrarGaleria()">Continuar 💕</button>
+    </div>
+
+    <div id="galeria">
+      </div>
+
+    <div id="jogo">
+      <h1>Agora vamos jogar um pouquinho 🎮💗</h1>
+      <p>Clique no botão para continuar:</p>
+      <span id="emoji-jogo" aria-label="Emoji de beijo">🫦</span>
+      <button class="btn" onclick="mostrarTexto1()">Continuar</button>
+    </div>
+
+    <div id="texto1">
+      <pre id="poesiaTexto"></pre>
+      <button class="btn" onclick="mostrarTexto2()">Continuar 💕</button>
+    </div>
+
+    <div id="texto2">
+      <p>Você é a minha safira, meu futuro e meu diamante. 💎</p>
+      <p>Eu amo você, e espero que um dia nós sejamos Garnet. 💞</p>
+      <button class="btn" onclick="mostrarFinal()">Continuar 💕</button>
+    </div>
+
+    <div id="final">
+      <p>Eu estava planejando te entregar o presente junto com o site...<br />
+      mas eu sou ansiosa 😅</p>
+      <button class="btn" onclick="mostrarMemeETexto()">Continuar 💕</button>
+    </div>
+
+    <div id="etapaMeme">
+        <img id="imagemMeme" src="static/imagens/meme.jpg" alt="Meme engraçado" class="fade-in-slow" />
+        <div id="textoMaquinaFinal" class="maquina"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // Variáveis de controle globais
+    let galeriaIndex = 0;
+    const imagensGaleria = [
+        "static/imagens/eu te amo.jpg",
+        "static/imagens/eu te amo(1).jpg",
+        "static/imagens/eu te amo(2).jpg"
+    ];
+
+    // DEFINIÇÃO DO PRIMEIRO TEXTO DA MÁQUINA DE ESCREVER (curto)
+    const textoMaquinaDestaque = `Eu demorei dias para fazer esse código só para ver
+esse seu sorriso bobo`;
+
+    // DEFINIÇÃO DO TEXTO LONGO PARA A MÁQUINA DE ESCREVER (usado após a imagem final)
+    const textoLongoMaquina = `Eu sei que muitas vezes temos dificuldade, obstáculos e desafios no dia dia...
+às vezes estamos cansadas e acabadas de tanto trabalhar,
+mas eu posso jurar para você que eu viveria todo dia o mesmo dia só para poder estar ao seu lado,
+eu viveria mil e uma vidas só para poder viver com você
+e eu morreria mil e uma vezes para poder morrer com você,
+eu sou estupidamente apaixonada por você
+eu espero do fundo do meu coração que você saiba disso.
+ALIAS AMOR, QUALQUER DATA QUE VC TIVESSE COLOCADO NA SENHA
+SERIA A CERTA, POIS TODOS OS DIAS COM VC SÃO IMPORTANTES`;
+
+    // NOVO: Texto corrigido para a mensagem final (após o meme)
+    const textoMensagemFinal = `Feliz nosso dia, amor! Espero que saiba que eu te amo muito e que, apesar do sono, trabalho, escola e faculdade, eu nunca escolheria algo diferente disso. Eu viveria essa mesma vida mil vezes com você e morreria mil vezes com você, só para poder estar ao seu lado.
+P.S.: Qualquer data na senha iria funcionar, pois todos os dias com você são importantes.`;
+
+
+    // Conteúdo da poesia (mantido)
+    const textoPoesiaConteudo = `Todos os dias,
+lágrimas de um artista morto,
+de um professor desistente,
+e de um guitarrista inexistente.
+
+De todas as coisas que eu desisti,
+por você, eu quis tentar.
+
+Dizer “te amo” é muito?
+Ou pouco?`;
+
+
+    /**
+     * Esconde todos os blocos principais da história.
+     * Define o 'display' de cada bloco como 'none'.
+     */
+    function esconderTodos() {
+      const blocos = [
+        'inicio', 'chat', 'perguntaContinuar', 'destaque', 'textoMaquina',
+        'escolhaFinal', 'casamentoCerto', 'respostaErrada', 'imagemFinal',
+        'mensagem1', 'galeria', 'jogo', 'texto1', 'texto2', 'final', 'etapaMeme', 'textoMaquinaIntermediario'
+      ];
+      blocos.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+    }
+
+    /**
+     * Mostra um elemento pelo ID, definindo seu 'display' como 'block'.
+     * Esconde todos os outros antes de mostrar o elemento desejado.
+     * @param {string} id - O ID do elemento a ser mostrado.
+     */
+    function mostrarElemento(id) {
+        esconderTodos(); // Esconde todos os outros elementos primeiro
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'block';
+    }
+
+    /**
+     * Simula o efeito de máquina de escrever em um elemento <pre>.
+     * @param {HTMLElement} elemento - O elemento <pre> onde o texto será escrito.
+     * @param {string} texto - O texto a ser escrito.
+     * @param {Function} [callback] - Função a ser chamada após o texto ser totalmente escrito.
+     */
+    function escreverTexto(elemento, texto, callback) {
+        let i = 0;
+        elemento.textContent = ''; // Limpa o conteúdo antes de começar a digitar
+        elemento.classList.add('escrevendo'); // Adiciona a classe para ativar a animação CSS
+        
+        const intervalo = setInterval(() => {
+            if (i < texto.length) {
+                elemento.textContent += texto.charAt(i);
+                i++;
+            } else {
+                clearInterval(intervalo);
+                elemento.classList.remove('escrevendo'); // Remove a classe após digitar
+                if (callback) callback();
+            }
+        }, 40); // Velocidade da digitação (40ms por caractere)
+    }
+
+
+    // --- Funções de Navegação da História ---
+
+    function mostrarChat() {
+      mostrarElemento('chat');
+    }
+
+    function mostrarPerguntaContinuar() {
+      mostrarElemento('perguntaContinuar');
+    }
+
+    function mostrarDestaque() {
+      mostrarElemento('destaque');
+    }
+
+    // Função para o PRIMEIRO texto da máquina de escrever (usa textoMaquinaDestaque)
+    function mostrarTextoMaquina() {
+      mostrarElemento('textoMaquina');
+      const divTextoMaquina = document.getElementById('textoMaquina');
+      divTextoMaquina.innerHTML = '<pre></pre>';
+      const preElement = divTextoMaquina.querySelector('pre');
+
+      escreverTexto(preElement, textoMaquinaDestaque, () => { // Usa textoMaquinaDestaque
+        setTimeout(() => {
+          mostrarElemento('escolhaFinal');
+        }, 800);
+      });
+    }
+
+    function mostrarCasamento() {
+      mostrarElemento('casamentoCerto');
+    }
+
+    function mostrarErro() {
+      mostrarElemento('respostaErrada');
+    }
+
+    function mostrarFinalCompleto() {
+      mostrarElemento('imagemFinal');
+      // O botão nesta div agora chama mostrarTextoMaquinaIntermediario(), que usará o textoLongoMaquina
+    }
+
+    // Função para exibir o texto da máquina de escrever INTERMEDIÁRIO (que será o texto longo após a imagem final)
+    function mostrarTextoMaquinaIntermediario() {
+      mostrarElemento('textoMaquinaIntermediario');
+      const divTextoMaquinaIntermediario = document.getElementById('textoMaquinaIntermediario');
+      const preElement = divTextoMaquinaIntermediario.querySelector('pre');
+
+      escreverTexto(preElement, textoLongoMaquina, () => { // Usa textoLongoMaquina
+        // O botão "Continuar" dentro de #textoMaquinaIntermediario já leva para mostrarGaleria()
+      });
+    }
+
+    // A função mostrarMensagem1 não é mais chamada no fluxo principal, mas está mantida
+    function mostrarMensagem1() { 
+      mostrarElemento('mensagem1');
+    }
+
+
+    function mostrarGaleria() {
+        mostrarElemento('galeria');
+        galeriaIndex = 0; // Reinicia a galeria
+        const galeriaDiv = document.getElementById('galeria');
+        
+        galeriaDiv.innerHTML = `<img src="${imagensGaleria[galeriaIndex]}" alt="eu te amo ${galeriaIndex + 1}" class="imagem-galeria" />`;
+
+        const btnGaleria = document.createElement('button');
+        btnGaleria.classList.add('btn');
+        btnGaleria.textContent = 'Próxima Imagem 💕';
+        btnGaleria.onclick = proximaImagemGaleria;
+        galeriaDiv.appendChild(btnGaleria);
+    }
+
+    function proximaImagemGaleria() {
+        galeriaIndex++;
+        const galeriaDiv = document.getElementById('galeria');
+        const imagemElement = galeriaDiv.querySelector('.imagem-galeria');
+        const btnGaleria = galeriaDiv.querySelector('.btn');
+
+        if (galeriaIndex < imagensGaleria.length) {
+            imagemElement.src = imagensGaleria[galeriaIndex];
+            imagemElement.alt = `eu te amo ${galeriaIndex + 1}`;
+        } else {
+            // Se todas as imagens foram exibidas, vai para o jogo
+            btnGaleria.remove(); // Remove o botão anterior
+            const newBtn = document.createElement('button');
+            newBtn.classList.add('btn');
+            newBtn.textContent = 'Continuar para o Jogo 💕';
+            newBtn.onclick = mostrarJogo;
+            galeriaDiv.appendChild(newBtn);
+        }
+    }
+
+
+    function mostrarJogo() {
+      mostrarElemento('jogo');
+    }
+
+    function mostrarTexto1() {
+      mostrarElemento('texto1');
+      const poesiaPre = document.getElementById('poesiaTexto');
+      poesiaPre.textContent = textoPoesiaConteudo;
+    }
+
+    function mostrarTexto2() {
+      mostrarElemento('texto2');
+    }
+
+    function mostrarFinal() {
+      mostrarElemento('final');
+    }
+
+    // Função para o ÚLTIMO texto (após o meme), agora usando o texto corrigido
+    function mostrarMemeETexto() {
+      mostrarElemento('etapaMeme');
+      const imgMeme = document.getElementById('imagemMeme');
+      const textoMaquinaFinalDiv = document.getElementById('textoMaquinaFinal');
+
+      imgMeme.style.display = 'block';
+
+      setTimeout(() => {
+          textoMaquinaFinalDiv.style.display = 'block';
+          textoMaquinaFinalDiv.innerHTML = '<pre></pre>';
+          const preElement = textoMaquinaFinalDiv.querySelector('pre');
+          escreverTexto(preElement, textoMensagemFinal); // AGORA USA O TEXTO CORRIGIDO PARA O FINAL!
+      }, 1500);
+    }
+
+
+    // --- Inicialização ao carregar a página ---
+    document.addEventListener("DOMContentLoaded", () => {
+      esconderTodos(); // Esconde todos os blocos no início
+      document.getElementById('inicio').style.display = 'block'; // Mostra apenas a tela de início
+    });
+  </script>
+</body>
+</html>
